@@ -1,0 +1,35 @@
+﻿version: '3.7'
+
+services:
+  php:
+    build: ./php7.2
+    volumes:
+      - ./html:/var/www/html
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - mysql
+  
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+  
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    restart: always
+    ports:
+      - 8080:80
+
+volumes:
+  db_data: {}
+  
